@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"strings"
@@ -44,6 +45,7 @@ const (
 	flagOrganizationUrl = "org-url"
 	flagTokenScope      = "token-scope"
 	flagTokenTTL        = "token-ttl"
+	flagOutput          = "output"
 )
 
 // Execute executes the root command.
@@ -83,7 +85,17 @@ func issue(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	fmt.Print(pat)
+	format := viper.GetString(flagOutput)
+	switch format {
+	case "raw":
+		fmt.Print(pat.Token)
+	case "json":
+		b, err := json.Marshal(pat)
+		if err != nil {
+			return err
+		}
+		fmt.Print(string(b))
+	}
 	return nil
 }
 
@@ -116,8 +128,18 @@ func list(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	for _, t := range pats {
-		fmt.Printf("%s %s %s\n", t.AuthorizationId, t.DisplayName, t.Scope)
+	format := viper.GetString(flagOutput)
+	switch format {
+	case "raw":
+		for _, t := range pats {
+			fmt.Printf("%s %s %s\n", t.AuthorizationId, t.DisplayName, t.Scope)
+		}
+	case "json":
+		b, err := json.Marshal(pats)
+		if err != nil {
+			return err
+		}
+		fmt.Print(string(b))
 	}
 
 	return nil
@@ -130,8 +152,10 @@ func init() {
 	rootCmd.PersistentFlags().String(flagTenantId, "", "AAD Tenant Id")
 	rootCmd.PersistentFlags().String(flagClientId, "", "AAD Client Id")
 	rootCmd.PersistentFlags().String(flagOrganizationUrl, "", "Azure DevOps Organization URL")
-	rootCmd.PersistentFlags().StringSlice(flagTokenScope, nil, "Azure DevOps PAT Token Scope")
-	rootCmd.PersistentFlags().Duration(flagTokenTTL, time.Hour*24*30, "Azure DevOps PAT Token TTL")
+	rootCmd.PersistentFlags().String(flagOutput, "raw", "Output format, 'raw' or 'json'")
+
+	issueCmd.Flags().StringSlice(flagTokenScope, nil, "Azure DevOps PAT Token Scope")
+	issueCmd.Flags().Duration(flagTokenTTL, time.Hour*24*30, "Azure DevOps PAT Token TTL")
 
 	if err := viper.BindPFlags(rootCmd.PersistentFlags()); err != nil {
 		log.Fatalf("Error: %v", err)
