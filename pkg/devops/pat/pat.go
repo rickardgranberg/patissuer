@@ -56,8 +56,8 @@ func (t *PatClient) ListTokens(ctx context.Context) ([]PatToken, error) {
 	t.apiClient.UnmarshalBody(resp, &tokens)
 
 	return tokens.PatTokens, nil
-
 }
+
 func (t *PatClient) CreateToken(ctx context.Context, displayName string, scopes []string, validTo time.Time) (PatToken, error) {
 	request := &PatTokenCreateRequest{
 		AllOrgs:     false,
