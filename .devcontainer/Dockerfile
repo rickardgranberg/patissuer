@@ -11,6 +11,7 @@ ARG NODE_VERSION="lts/*"
 RUN if [ "${INSTALL_NODE}" = "true" ]; then su vscode -c "umask 0002 && . /usr/local/share/nvm/nvm.sh && nvm install ${NODE_VERSION} 2>&1"; fi
 
 RUN apt-get update \
+    && apt install -y --no-install-recommends xdg-utils \
     # Install Oh-my-bash:
     && sudo su $USERNAME -c 'rm -rf $HOME/.oh-my-bash && bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"' \
     #

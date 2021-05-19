@@ -5,11 +5,12 @@ import (
 	"log"
 	"strings"
 
+	"github.com/rickardgranberg/patissuer/pkg/devops"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
-const clientName = "patsissuer"
+const clientName = "patissuer"
 
 var (
 	cfgFile string
@@ -29,19 +30,32 @@ var (
 
 const (
 	configFileName = "." + clientName
-	tenantIdFlag   = "aad-tenant-id"
-	clientIdFlag   = "aad-client-id"
-	tokenScopeFlag = "token-scope"
+	flagTenantId   = "aad-tenant-id"
+	flagClientId   = "aad-client-id"
+	flagTokenScope = "token-scope"
 )
 
 // Execute executes the root command.
 func Execute(version, commit, buildTime string) error {
 	rootCmd.Version = fmt.Sprintf("%s (commit: %s, time: %s)", version, commit, buildTime)
-	log.Printf("%s version %s", rootCmd.Use, rootCmd.Version)
 	return rootCmd.Execute()
 }
 
 func issue(cmd *cobra.Command, args []string) error {
+	cl, err := devops.NewClient(viper.GetString(flagTenantId), viper.GetString(flagClientId))
+
+	if err != nil {
+		log.Printf("Error creating DevOps client: %v", err)
+		return err
+	}
+
+	pat, err := cl.IssuePat(viper.GetStringSlice(flagTokenScope))
+
+	if err != nil {
+		return err
+	}
+
+	fmt.Print(pat)
 	return nil
 }
 
@@ -49,9 +63,9 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", fmt.Sprintf("config file (default is ./%s.yaml)", configFileName))
-	rootCmd.PersistentFlags().String(tenantIdFlag, "", "AAD Tenant Id")
-	rootCmd.PersistentFlags().String(clientIdFlag, "", "AAD Client Id")
-	rootCmd.PersistentFlags().StringSlice(tokenScopeFlag, nil, "Azure DevOps Token Scope")
+	rootCmd.PersistentFlags().String(flagTenantId, "", "AAD Tenant Id")
+	rootCmd.PersistentFlags().String(flagClientId, "", "AAD Client Id")
+	rootCmd.PersistentFlags().StringSlice(flagTokenScope, nil, "Azure DevOps Token Scope")
 
 	if err := viper.BindPFlags(rootCmd.PersistentFlags()); err != nil {
 		log.Fatalf("Error: %v", err)

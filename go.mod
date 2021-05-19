@@ -3,6 +3,7 @@ module github.com/rickardgranberg/patissuer
 go 1.16
 
 require (
+	github.com/AzureAD/microsoft-authentication-library-for-go v0.2.0 // indirect
 	github.com/armon/consul-api v0.0.0-20180202201655-eb2c6b5be1b6 // indirect
 	github.com/coreos/go-etcd v2.0.0+incompatible // indirect
 	github.com/cpuguy83/go-md2man v1.0.10 // indirect
