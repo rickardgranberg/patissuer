@@ -8,7 +8,9 @@ require (
 	github.com/coreos/go-etcd v2.0.0+incompatible // indirect
 	github.com/cpuguy83/go-md2man v1.0.10 // indirect
 	github.com/golang/mock v1.5.0 // indirect
+	github.com/google/uuid v1.1.1 // indirect
 	github.com/magefile/mage v1.11.0 // indirect
+	github.com/microsoft/azure-devops-go-api/azuredevops v1.0.0-b5 // indirect
 	github.com/onsi/ginkgo v1.16.2 // indirect
 	github.com/spf13/cobra v1.1.3 // indirect
 	github.com/spf13/viper v1.7.1 // indirect
