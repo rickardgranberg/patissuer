@@ -13,7 +13,6 @@ import (
 	"github.com/microsoft/azure-devops-go-api/azuredevops"
 )
 
-const apiUrl = "_apis/tokens/pats"
 const apiVersion = "6.1-preview.1"
 
 var resourceAreaId, _ = uuid.Parse("951917ac-a960-4999-8464-e3f0aa25b381")
@@ -44,7 +43,7 @@ func (t *PatClient) ListTokens(ctx context.Context) ([]PatToken, error) {
 		apiVersion,
 		routeValues,
 		nil,
-		nil, //bytes.NewReader(body),
+		nil,
 		"",
 		azuredevops.MediaTypeApplicationJson,
 		nil)
@@ -53,7 +52,9 @@ func (t *PatClient) ListTokens(ctx context.Context) ([]PatToken, error) {
 	}
 
 	var tokens PagedPatTokens
-	t.apiClient.UnmarshalBody(resp, &tokens)
+	if err := t.apiClient.UnmarshalBody(resp, &tokens); err != nil {
+		return nil, err
+	}
 
 	return tokens.PatTokens, nil
 }
@@ -86,7 +87,9 @@ func (t *PatClient) CreateToken(ctx context.Context, displayName string, scopes 
 	}
 
 	var patResult PatTokenResult
-	t.apiClient.UnmarshalBody(resp, &patResult)
+	if err := t.apiClient.UnmarshalBody(resp, &patResult); err != nil {
+		return PatToken{}, err
+	}
 
 	if patResult.PatTokenError != None {
 		return PatToken{}, errors.New(patResult.PatTokenError)
