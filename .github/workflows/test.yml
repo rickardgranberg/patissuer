@@ -38,15 +38,15 @@ jobs:
         version: latest
         args: toolInstall
     - name: Build
-        uses: magefile/mage-action@v1
-        with:
-          version: latest
-          args: build
+      uses: magefile/mage-action@v1
+      with:
+        version: latest
+        args: build
     - name: Lint
-        uses: magefile/mage-action@v1
-        with:
-          version: latest
-          args: lint
+      uses: magefile/mage-action@v1
+      with:
+        version: latest
+        args: lint
     
   # run acceptance tests in a matrix with Terraform core versions
   test:
@@ -72,9 +72,9 @@ jobs:
         version: latest
         args: toolInstall
     - name: Test
-        timeout-minutes: 10
-        uses: magefile/mage-action@v1
-        with:
-          version: latest
-          args: test
+      timeout-minutes: 10
+      uses: magefile/mage-action@v1
+      with:
+        version: latest
+        args: test
        
