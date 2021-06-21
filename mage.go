@@ -73,6 +73,11 @@ func Update() error {
 	return sh.Run("go", "get", "-u", "./...")
 }
 
+// Creates a release using goreleaser
+func Release() error {
+	return sh.Run("goreleaser", "release", "--snapshot", "--skip-publish", "--skip-sign", "--rm-dist")
+}
+
 // Install all tool dependencies
 func ToolInstall() error {
 	tools, err := findTools()

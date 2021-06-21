@@ -5,6 +5,7 @@ package tools
 
 import (
 	_ "github.com/golang/mock/mockgen"
+	_ "github.com/goreleaser/goreleaser"
 	_ "github.com/onsi/ginkgo/ginkgo"
 	_ "mvdan.cc/gofumpt"
 )
