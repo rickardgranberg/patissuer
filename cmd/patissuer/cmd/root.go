@@ -42,7 +42,6 @@ const (
 	configFileName      = "." + clientName
 	flagTenantId        = "aad-tenant-id"
 	flagClientId        = "aad-client-id"
-	flagClientSecret    = "aad-client-secret"
 	flagLoginMethod     = "login-method"
 	flagLoginToken      = "login-token"
 	flagOrganizationUrl = "org-url"
@@ -58,7 +57,7 @@ func Execute(version, commit, buildTime string) error {
 }
 
 func issue(cmd *cobra.Command, args []string) error {
-	authClient, err := auth.NewAuthClient(viper.GetString(flagTenantId), viper.GetString(flagClientId), viper.GetString(flagClientSecret))
+	authClient, err := auth.NewAuthClient(viper.GetString(flagTenantId), viper.GetString(flagClientId))
 
 	if err != nil {
 		return fmt.Errorf("failed to initialize auth client: %w", err)
@@ -103,7 +102,7 @@ func issue(cmd *cobra.Command, args []string) error {
 }
 
 func list(cmd *cobra.Command, args []string) error {
-	authClient, err := auth.NewAuthClient(viper.GetString(flagTenantId), viper.GetString(flagClientId), viper.GetString(flagClientSecret))
+	authClient, err := auth.NewAuthClient(viper.GetString(flagTenantId), viper.GetString(flagClientId))
 
 	if err != nil {
 		return fmt.Errorf("failed to initialize auth client: %w", err)
@@ -154,7 +153,6 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", fmt.Sprintf("config file (default is ./%s.yaml)", configFileName))
 	rootCmd.PersistentFlags().String(flagTenantId, "", "AAD Tenant Id")
 	rootCmd.PersistentFlags().String(flagClientId, "", "AAD Client Id")
-	rootCmd.PersistentFlags().String(flagClientSecret, "", fmt.Sprintf("AAD Client Secret. Only required for %s login", auth.LoginMethodDeviceCode))
 	rootCmd.PersistentFlags().String(flagOrganizationUrl, "", "Azure DevOps Organization URL")
 	rootCmd.PersistentFlags().String(flagOutput, "raw", "Output format, 'raw' or 'json'")
 	rootCmd.PersistentFlags().String(flagLoginMethod, auth.LoginMethodInteractive, fmt.Sprintf("Login method, valid options are '%s', '%s' and '%s'", auth.LoginMethodInteractive, auth.LoginMethodDeviceCode, auth.LoginMethodBearerToken))
