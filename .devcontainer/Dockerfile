@@ -25,9 +25,9 @@ RUN apt-get update \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts/
 
 # Install Mage to build the code
-RUN git clone https://github.com/magefile/mage /tmp/gotools/mage \
+RUN su $USERNAME -c "git clone https://github.com/magefile/mage /tmp/gotools/mage \
     && cd /tmp/gotools/mage \
-    && go run bootstrap.go
+    && go run bootstrap.go"
 
 # Select oh-my-bash theme:
 RUN sed -i -e 's/OSH_THEME=.*/OSH_THEME="powerline-multiline"/g' /home/${USERNAME}/.bashrc
