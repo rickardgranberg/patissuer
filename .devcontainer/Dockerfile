@@ -1,7 +1,7 @@
 # See here for image contents: https://github.com/microsoft/vscode-dev-containers/tree/v0.177.0/containers/go/.devcontainer/base.Dockerfile
 
 # [Choice] Go version: 1, 1.16, 1.15
-ARG VARIANT="1.16"
+ARG VARIANT="1.17"
 FROM mcr.microsoft.com/vscode/devcontainers/go:0-${VARIANT}
 
 ARG USERNAME=vscode
@@ -25,9 +25,9 @@ RUN apt-get update \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts/
 
 # Install Mage to build the code
-RUN git clone https://github.com/magefile/mage /tmp/gotools/mage \
+RUN su $USERNAME -c "git clone https://github.com/magefile/mage /tmp/gotools/mage \
     && cd /tmp/gotools/mage \
-    && go run bootstrap.go
+    && go run bootstrap.go"
 
 # Select oh-my-bash theme:
 RUN sed -i -e 's/OSH_THEME=.*/OSH_THEME="powerline-multiline"/g' /home/${USERNAME}/.bashrc
