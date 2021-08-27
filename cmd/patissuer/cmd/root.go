@@ -39,7 +39,7 @@ var (
 )
 
 const (
-	configFileName      = "." + clientName
+	configFileName      = clientName
 	flagTenantId        = "aad-tenant-id"
 	flagClientId        = "aad-client-id"
 	flagLoginMethod     = "login-method"
@@ -177,7 +177,7 @@ func initConfig() {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
 	} else {
-		// Search config in working directory with name ".apigw" (without extension).
+		viper.AddConfigPath(fmt.Sprintf("$HOME/.%s", configFileName))
 		viper.AddConfigPath(".")
 		viper.SetConfigName(configFileName)
 	}
