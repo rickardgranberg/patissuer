@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 	"strings"
 	"time"
 
@@ -49,6 +50,7 @@ const (
 	flagTokenScope      = "token-scope"
 	flagTokenTTL        = "token-ttl"
 	flagOutput          = "output"
+	flagOutputFile      = "output-file"
 )
 
 // Execute executes the root command.
@@ -79,13 +81,13 @@ func issue(cmd *cobra.Command, args []string) error {
 	format := viper.GetString(flagOutput)
 	switch format {
 	case "raw":
-		fmt.Print(pat.Token)
+		return outputContent(pat.Token)
 	case "json":
 		b, err := json.Marshal(pat)
 		if err != nil {
 			return err
 		}
-		fmt.Print(string(b))
+		return outputContent(string(b))
 	}
 	return nil
 }
@@ -110,15 +112,21 @@ func list(cmd *cobra.Command, args []string) error {
 	format := viper.GetString(flagOutput)
 	switch format {
 	case "raw":
+		b := strings.Builder{}
+
 		for _, t := range pats {
-			fmt.Printf("%s %s %s\n", t.AuthorizationId, t.DisplayName, t.Scope)
+			_, err := b.WriteString(fmt.Sprintf("%s %s %s\n", t.AuthorizationId, t.DisplayName, t.Scope))
+			if err != nil {
+				return err
+			}
 		}
+		return outputContent(b.String())
 	case "json":
 		b, err := json.Marshal(pats)
 		if err != nil {
 			return err
 		}
-		fmt.Print(string(b))
+		return outputContent(string(b))
 	}
 
 	return nil
@@ -161,6 +169,25 @@ func loginAndCreateClient(ctx context.Context) (*devops.Client, error) {
 	return cl, nil
 }
 
+func outputContent(format string, a ...interface{}) error {
+	fn := viper.GetString(flagOutputFile)
+
+	if fn == "" {
+		fmt.Printf(format, a...)
+	} else {
+		f, err := os.Create(fn)
+		if err != nil {
+			return fmt.Errorf("failed to create file: %w", err)
+		}
+
+		if _, err := f.WriteString(fmt.Sprintf(format, a...)); err != nil {
+			return fmt.Errorf("failed to write to file: %w", err)
+		}
+	}
+
+	return nil
+}
+
 func init() {
 	cobra.OnInitialize(initConfig)
 
@@ -169,6 +196,7 @@ func init() {
 	rootCmd.PersistentFlags().String(flagClientId, "", "AAD Client Id")
 	rootCmd.PersistentFlags().String(flagOrganizationUrl, "", "Azure DevOps Organization URL")
 	rootCmd.PersistentFlags().String(flagOutput, "raw", "Output format, 'raw' or 'json'")
+	rootCmd.PersistentFlags().String(flagOutputFile, "", "File name to save output in, instead of printing to stdout")
 	rootCmd.PersistentFlags().String(flagLoginMethod, auth.LoginMethodInteractive, fmt.Sprintf("Login method, valid options are '%s', '%s' and '%s'", auth.LoginMethodInteractive, auth.LoginMethodDeviceCode, auth.LoginMethodBearerToken))
 	rootCmd.PersistentFlags().String(flagLoginToken, "", "The bearer token when using 'token' login method")
 	rootCmd.PersistentFlags().Int(flagLoginRetry, 3, "The number of times to retry the login phase")
