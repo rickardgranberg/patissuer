@@ -12,7 +12,6 @@ import (
 type AuthClient struct {
 	tenantId string
 	clientId string
-	client   public.Client
 }
 
 const (
@@ -32,32 +31,33 @@ func NewAuthClient(tenantId, clientId string) (*AuthClient, error) {
 		clientId: clientId,
 	}
 
-	http := &http.Client{}
-	client, err := public.New(clientId,
-		public.WithHTTPClient(http),
-		public.WithAuthority(fmt.Sprintf(aadInstance, tenantId)))
-
-	if err != nil {
-		return nil, fmt.Errorf("error creating client: %w", err)
-	}
-
-	cl.client = client
-
 	return cl, nil
 }
 
 func (a *AuthClient) Login(ctx context.Context, method, token string) (string, error) {
 
+	cl, err := a.createPublicClient()
+	if err != nil {
+		return "", fmt.Errorf("error creating client: %w", err)
+	}
+
 	switch method {
 	case LoginMethodBearerToken:
 		return a.loginBearerToken(ctx, token)
 	case LoginMethodInteractive:
-		return a.loginInteractive(ctx)
+		return a.loginInteractive(ctx, cl)
 	case LoginMethodDeviceCode:
-		return a.loginDeviceCode(ctx)
+		return a.loginDeviceCode(ctx, cl)
 	default:
 		return "", fmt.Errorf("unsupported login method provided: %s", method)
 	}
+}
+
+func (a *AuthClient) createPublicClient() (public.Client, error) {
+	http := &http.Client{}
+	return public.New(a.clientId,
+		public.WithHTTPClient(http),
+		public.WithAuthority(fmt.Sprintf(aadInstance, a.tenantId)))
 }
 
 func (a *AuthClient) loginBearerToken(ctx context.Context, token string) (string, error) {
@@ -67,34 +67,26 @@ func (a *AuthClient) loginBearerToken(ctx context.Context, token string) (string
 	return token, nil
 }
 
-func (a *AuthClient) loginInteractive(ctx context.Context) (string, error) {
-	// This is done as an attempt to avoid DNS resolution errors during login:
-	_, err := net.LookupHost(loginHost)
-
-	if err != nil {
-		return "", fmt.Errorf("name lookup error: %w", err)
-	}
-
-	accounts := a.client.Accounts()
+func (a *AuthClient) loginInteractive(ctx context.Context, cl public.Client) (string, error) {
+	accounts := cl.Accounts()
 	if len(accounts) > 0 {
 		// Assuming the user wanted the first account
 		userAccount := accounts[0]
 		// found a cached account, now see if an applicable token has been cached
-		result, err := a.client.AcquireTokenSilent(ctx, scopes, public.WithSilentAccount(userAccount))
+		result, err := cl.AcquireTokenSilent(ctx, scopes, public.WithSilentAccount(userAccount))
 		if err != nil {
 			return "", fmt.Errorf("aquire token silent failed: %w", err)
 		}
 		return result.AccessToken, nil
 	}
-
-	result, err := a.client.AcquireTokenInteractive(ctx, scopes, public.WithRedirectURI("http://localhost"))
+	result, err := cl.AcquireTokenInteractive(ctx, scopes, public.WithRedirectURI("http://localhost"))
 	if err != nil {
 		return "", fmt.Errorf("aquire token interactive failed: %w", err)
 	}
 	return result.AccessToken, nil
 }
 
-func (a *AuthClient) loginDeviceCode(ctx context.Context) (string, error) {
+func (a *AuthClient) loginDeviceCode(ctx context.Context, cl public.Client) (string, error) {
 	// This is done as an attempt to avoid DNS resolution errors during login:
 	_, err := net.LookupHost(loginHost)
 
@@ -102,19 +94,19 @@ func (a *AuthClient) loginDeviceCode(ctx context.Context) (string, error) {
 		return "", fmt.Errorf("name lookup error: %w", err)
 	}
 
-	accounts := a.client.Accounts()
+	accounts := cl.Accounts()
 	if len(accounts) > 0 {
 		// Assuming the user wanted the first account
 		userAccount := accounts[0]
 		// found a cached account, now see if an applicable token has been cached
-		result, err := a.client.AcquireTokenSilent(ctx, scopes, public.WithSilentAccount(userAccount))
+		result, err := cl.AcquireTokenSilent(ctx, scopes, public.WithSilentAccount(userAccount))
 		if err != nil {
 			return "", err
 		}
 		return result.AccessToken, fmt.Errorf("aquire token silent failed: %w", err)
 	}
 
-	code, err := a.client.AcquireTokenByDeviceCode(ctx, scopes)
+	code, err := cl.AcquireTokenByDeviceCode(ctx, scopes)
 	if err != nil {
 		return "", fmt.Errorf("aquire token device code failed: %w", err)
 	}
