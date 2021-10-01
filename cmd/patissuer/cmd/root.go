@@ -58,7 +58,7 @@ func Execute(version, commit, buildTime string) error {
 }
 
 func issue(cmd *cobra.Command, args []string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Minute)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(viper.GetInt(flagLoginRetry))*time.Minute)
 	defer cancel()
 
 	cl, err := loginAndCreateClient(ctx)
@@ -91,7 +91,7 @@ func issue(cmd *cobra.Command, args []string) error {
 }
 
 func list(cmd *cobra.Command, args []string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Minute)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(viper.GetInt(flagLoginRetry))*time.Minute)
 	defer cancel()
 
 	cl, err := loginAndCreateClient(ctx)
@@ -134,7 +134,12 @@ func loginAndCreateClient(ctx context.Context) (*devops.Client, error) {
 	var t string
 
 	for i := 0; i < viper.GetInt(flagLoginRetry); i++ {
-		t, err = authClient.Login(ctx, viper.GetString(flagLoginMethod), viper.GetString(flagLoginToken))
+		sctx, cancel := context.WithTimeout(ctx, 30*time.Second)
+		defer cancel()
+		t, err = authClient.Login(sctx, viper.GetString(flagLoginMethod), viper.GetString(flagLoginToken))
+		if err == context.Canceled {
+			return nil, fmt.Errorf("login canceled %w", err)
+		}
 		if err != nil {
 			log.Printf("failed to login with error: %v\n", err)
 			log.Printf("Retrying login (%d of %d)...", i+1, viper.GetInt(flagLoginRetry))

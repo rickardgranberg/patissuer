@@ -3,6 +3,8 @@ package auth
 import (
 	"context"
 	"fmt"
+	"net"
+	"net/http"
 
 	"github.com/AzureAD/microsoft-authentication-library-for-go/apps/public"
 )
@@ -19,7 +21,8 @@ const (
 	LoginMethodBearerToken = "bearertoken"
 )
 
-const aadInstance = "https://login.microsoftonline.com/%s/v2.0"
+const loginHost = "login.microsoftonline.com"
+const aadInstance = "https://" + loginHost + "/%s/v2.0"
 
 var scopes = []string{"499b84ac-1321-427f-aa17-267ca6975798/user_impersonation"} //Constant value to target Azure DevOps. Do not change
 
@@ -29,11 +32,13 @@ func NewAuthClient(tenantId, clientId string) (*AuthClient, error) {
 		clientId: clientId,
 	}
 
+	http := &http.Client{}
 	client, err := public.New(clientId,
+		public.WithHTTPClient(http),
 		public.WithAuthority(fmt.Sprintf(aadInstance, tenantId)))
 
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error creating client: %w", err)
 	}
 
 	cl.client = client
@@ -63,6 +68,13 @@ func (a *AuthClient) loginBearerToken(ctx context.Context, token string) (string
 }
 
 func (a *AuthClient) loginInteractive(ctx context.Context) (string, error) {
+	// This is done as an attempt to avoid DNS resolution errors during login:
+	_, err := net.LookupHost(loginHost)
+
+	if err != nil {
+		return "", fmt.Errorf("name lookup error: %w", err)
+	}
+
 	accounts := a.client.Accounts()
 	if len(accounts) > 0 {
 		// Assuming the user wanted the first account
@@ -70,19 +82,26 @@ func (a *AuthClient) loginInteractive(ctx context.Context) (string, error) {
 		// found a cached account, now see if an applicable token has been cached
 		result, err := a.client.AcquireTokenSilent(ctx, scopes, public.WithSilentAccount(userAccount))
 		if err != nil {
-			return "", err
+			return "", fmt.Errorf("aquire token silent failed: %w", err)
 		}
 		return result.AccessToken, nil
 	}
 
 	result, err := a.client.AcquireTokenInteractive(ctx, scopes, public.WithRedirectURI("http://localhost"))
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("aquire token interactive failed: %w", err)
 	}
 	return result.AccessToken, nil
 }
 
 func (a *AuthClient) loginDeviceCode(ctx context.Context) (string, error) {
+	// This is done as an attempt to avoid DNS resolution errors during login:
+	_, err := net.LookupHost(loginHost)
+
+	if err != nil {
+		return "", fmt.Errorf("name lookup error: %w", err)
+	}
+
 	accounts := a.client.Accounts()
 	if len(accounts) > 0 {
 		// Assuming the user wanted the first account
@@ -92,18 +111,18 @@ func (a *AuthClient) loginDeviceCode(ctx context.Context) (string, error) {
 		if err != nil {
 			return "", err
 		}
-		return result.AccessToken, nil
+		return result.AccessToken, fmt.Errorf("aquire token silent failed: %w", err)
 	}
 
 	code, err := a.client.AcquireTokenByDeviceCode(ctx, scopes)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("aquire token device code failed: %w", err)
 	}
 
 	fmt.Println(code.Result.Message)
 	result, err := code.AuthenticationResult(ctx)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("auth result failed: %w", err)
 	}
 	return result.AccessToken, nil
 }
