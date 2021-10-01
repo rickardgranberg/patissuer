@@ -3,7 +3,6 @@ package auth
 import (
 	"context"
 	"fmt"
-	"log"
 	"net"
 	"net/http"
 
@@ -22,7 +21,8 @@ const (
 	LoginMethodBearerToken = "bearertoken"
 )
 
-const aadInstance = "https://login.microsoftonline.com/%s/v2.0"
+const loginHost = "login.microsoftonline.com"
+const aadInstance = "https://" + loginHost + "/%s/v2.0"
 
 var scopes = []string{"499b84ac-1321-427f-aa17-267ca6975798/user_impersonation"} //Constant value to target Azure DevOps. Do not change
 
@@ -68,13 +68,12 @@ func (a *AuthClient) loginBearerToken(ctx context.Context, token string) (string
 }
 
 func (a *AuthClient) loginInteractive(ctx context.Context) (string, error) {
-	addrs, err := net.LookupHost("login.microsoftonline.com")
+	// This is done as an attempt to avoid DNS resolution errors during login:
+	_, err := net.LookupHost(loginHost)
 
 	if err != nil {
 		return "", fmt.Errorf("name lookup error: %w", err)
 	}
-
-	log.Printf("Addrs: %v", addrs)
 
 	accounts := a.client.Accounts()
 	if len(accounts) > 0 {
@@ -96,6 +95,13 @@ func (a *AuthClient) loginInteractive(ctx context.Context) (string, error) {
 }
 
 func (a *AuthClient) loginDeviceCode(ctx context.Context) (string, error) {
+	// This is done as an attempt to avoid DNS resolution errors during login:
+	_, err := net.LookupHost(loginHost)
+
+	if err != nil {
+		return "", fmt.Errorf("name lookup error: %w", err)
+	}
+
 	accounts := a.client.Accounts()
 	if len(accounts) > 0 {
 		// Assuming the user wanted the first account
