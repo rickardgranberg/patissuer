@@ -145,14 +145,18 @@ func loginAndCreateClient(ctx context.Context) (*devops.Client, error) {
 		sctx, cancel := context.WithTimeout(ctx, 30*time.Second)
 		defer cancel()
 		t, err = authClient.Login(sctx, viper.GetString(flagLoginMethod), viper.GetString(flagLoginToken))
+
+		if err == nil {
+			break
+		}
+
 		if err == context.Canceled {
 			return nil, fmt.Errorf("login canceled %w", err)
 		}
-		if err != nil {
-			log.Printf("failed to login with error: %v\n", err)
-			log.Printf("Retrying login (%d of %d)...", i+1, viper.GetInt(flagLoginRetry))
-			time.Sleep(2 * time.Second)
-		}
+
+		log.Printf("failed to login with error: %v\n", err)
+		log.Printf("Retrying login (%d of %d)...", i+1, viper.GetInt(flagLoginRetry))
+		time.Sleep(2 * time.Second)
 	}
 
 	if err != nil {
