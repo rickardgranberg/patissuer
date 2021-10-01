@@ -44,6 +44,7 @@ const (
 	flagClientId        = "aad-client-id"
 	flagLoginMethod     = "login-method"
 	flagLoginToken      = "login-token"
+	flagLoginRetry      = "login-retry"
 	flagOrganizationUrl = "org-url"
 	flagTokenScope      = "token-scope"
 	flagTokenTTL        = "token-ttl"
@@ -57,22 +58,10 @@ func Execute(version, commit, buildTime string) error {
 }
 
 func issue(cmd *cobra.Command, args []string) error {
-	authClient, err := auth.NewAuthClient(viper.GetString(flagTenantId), viper.GetString(flagClientId))
-
-	if err != nil {
-		return fmt.Errorf("failed to initialize auth client: %w", err)
-	}
-
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Minute)
 	defer cancel()
 
-	t, err := authClient.Login(ctx, viper.GetString(flagLoginMethod), viper.GetString(flagLoginToken))
-
-	if err != nil {
-		return fmt.Errorf("failed to login: %w", err)
-	}
-
-	cl, err := devops.NewClient(viper.GetString(flagOrganizationUrl), t)
+	cl, err := loginAndCreateClient(ctx)
 
 	if err != nil {
 		log.Printf("Error creating DevOps client: %v", err)
@@ -102,22 +91,10 @@ func issue(cmd *cobra.Command, args []string) error {
 }
 
 func list(cmd *cobra.Command, args []string) error {
-	authClient, err := auth.NewAuthClient(viper.GetString(flagTenantId), viper.GetString(flagClientId))
-
-	if err != nil {
-		return fmt.Errorf("failed to initialize auth client: %w", err)
-	}
-
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Minute)
 	defer cancel()
 
-	t, err := authClient.Login(ctx, viper.GetString(flagLoginMethod), viper.GetString(flagLoginToken))
-
-	if err != nil {
-		return fmt.Errorf("failed to login: %w", err)
-	}
-
-	cl, err := devops.NewClient(viper.GetString(flagOrganizationUrl), t)
+	cl, err := loginAndCreateClient(ctx)
 
 	if err != nil {
 		log.Printf("Error creating DevOps client: %v", err)
@@ -147,6 +124,38 @@ func list(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
+func loginAndCreateClient(ctx context.Context) (*devops.Client, error) {
+	authClient, err := auth.NewAuthClient(viper.GetString(flagTenantId), viper.GetString(flagClientId))
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to initialize auth client: %w", err)
+	}
+
+	var t string
+
+	for i := 0; i < viper.GetInt(flagLoginRetry); i++ {
+		t, err = authClient.Login(ctx, viper.GetString(flagLoginMethod), viper.GetString(flagLoginToken))
+		if err != nil {
+			log.Printf("failed to login with error: %v\n", err)
+			log.Printf("Retrying login (%d of %d)...", i+1, viper.GetInt(flagLoginRetry))
+			time.Sleep(2 * time.Second)
+		}
+	}
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to login: %w", err)
+	}
+
+	cl, err := devops.NewClient(viper.GetString(flagOrganizationUrl), t)
+
+	if err != nil {
+		log.Printf("Error creating DevOps client: %v", err)
+		return nil, err
+	}
+
+	return cl, nil
+}
+
 func init() {
 	cobra.OnInitialize(initConfig)
 
@@ -157,6 +166,7 @@ func init() {
 	rootCmd.PersistentFlags().String(flagOutput, "raw", "Output format, 'raw' or 'json'")
 	rootCmd.PersistentFlags().String(flagLoginMethod, auth.LoginMethodInteractive, fmt.Sprintf("Login method, valid options are '%s', '%s' and '%s'", auth.LoginMethodInteractive, auth.LoginMethodDeviceCode, auth.LoginMethodBearerToken))
 	rootCmd.PersistentFlags().String(flagLoginToken, "", "The bearer token when using 'token' login method")
+	rootCmd.PersistentFlags().Int(flagLoginRetry, 3, "The number of times to retry the login phase")
 
 	issueCmd.Flags().StringSlice(flagTokenScope, nil, "Azure DevOps PAT Token Scope")
 	issueCmd.Flags().Duration(flagTokenTTL, time.Hour*24*30, "Azure DevOps PAT Token TTL")
