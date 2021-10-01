@@ -81,13 +81,13 @@ func issue(cmd *cobra.Command, args []string) error {
 	format := viper.GetString(flagOutput)
 	switch format {
 	case "raw":
-		outputContent(pat.Token)
+		return outputContent(pat.Token)
 	case "json":
 		b, err := json.Marshal(pat)
 		if err != nil {
 			return err
 		}
-		outputContent(string(b))
+		return outputContent(string(b))
 	}
 	return nil
 }
@@ -115,15 +115,18 @@ func list(cmd *cobra.Command, args []string) error {
 		b := strings.Builder{}
 
 		for _, t := range pats {
-			b.WriteString(fmt.Sprintf("%s %s %s\n", t.AuthorizationId, t.DisplayName, t.Scope))
+			_, err := b.WriteString(fmt.Sprintf("%s %s %s\n", t.AuthorizationId, t.DisplayName, t.Scope))
+			if err != nil {
+				return err
+			}
 		}
-		outputContent(b.String())
+		return outputContent(b.String())
 	case "json":
 		b, err := json.Marshal(pats)
 		if err != nil {
 			return err
 		}
-		outputContent(string(b))
+		return outputContent(string(b))
 	}
 
 	return nil
@@ -177,7 +180,9 @@ func outputContent(format string, a ...interface{}) error {
 			return fmt.Errorf("failed to create file: %w", err)
 		}
 
-		f.WriteString(fmt.Sprintf(format, a...))
+		if _, err := f.WriteString(fmt.Sprintf(format, a...)); err != nil {
+			return fmt.Errorf("failed to write to file: %w", err)
+		}
 	}
 
 	return nil
