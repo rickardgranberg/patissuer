@@ -6,7 +6,8 @@
 // or in the accordance with the terms and conditions stipulated in the agreement/contract under which
 // the program has been supplied.
 // ==========================================================================================================
-//+build mage
+//go:build mage
+// +build mage
 
 // The SiteVerification Microservice build targets.
 package main
@@ -54,7 +55,7 @@ func Lint() error {
 // Run the tests.
 func Test() error {
 	mg.Deps(ToolInstall)
-	return sh.Run("ginkgo", "-timeout", "1m", "-noColor", "-race", "-v", "./...")
+	return sh.Run("ginkgo", "--timeout", "1m", "--no-color", "--race", "-v", "./...")
 }
 
 // Cleans the binaries.
