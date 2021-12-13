@@ -12,7 +12,7 @@ require (
 	github.com/onsi/ginkgo v1.16.4
 	github.com/spf13/cobra v1.2.1
 	github.com/spf13/viper v1.9.0
-	mvdan.cc/gofumpt v0.1.1
+	mvdan.cc/gofumpt v0.2.0
 )
 
 require (
@@ -130,14 +130,14 @@ require (
 	go.opencensus.io v0.23.0 // indirect
 	gocloud.dev v0.24.0 // indirect
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
-	golang.org/x/mod v0.5.0 // indirect
-	golang.org/x/net v0.0.0-20210825183410-e898025ed96a // indirect
+	golang.org/x/mod v0.5.1 // indirect
+	golang.org/x/net v0.0.0-20211015210444-4f30a5c0130f // indirect
 	golang.org/x/oauth2 v0.0.0-20210819190943-2bc19b11175f // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
-	golang.org/x/sys v0.0.0-20210831042530-f4d43177bf5e // indirect
+	golang.org/x/sys v0.0.0-20211102192858-4dd72447c267 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/time v0.0.0-20210723032227-1f47c861a9ac // indirect
-	golang.org/x/tools v0.1.5 // indirect
+	golang.org/x/tools v0.1.8-0.20211102182255-bb4add04ddef // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/api v0.56.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
