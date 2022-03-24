@@ -1,6 +1,6 @@
 module github.com/rickardgranberg/patissuer
 
-go 1.17
+go 1.18
 
 require (
 	github.com/AzureAD/microsoft-authentication-library-for-go v0.4.0
