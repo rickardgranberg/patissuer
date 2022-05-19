@@ -6,7 +6,7 @@ require (
 	github.com/AzureAD/microsoft-authentication-library-for-go v0.5.0
 	github.com/golang/mock v1.6.0
 	github.com/google/uuid v1.3.0
-	github.com/goreleaser/goreleaser v1.8.3
+	github.com/goreleaser/goreleaser v1.9.0
 	github.com/magefile/mage v1.13.0
 	github.com/microsoft/azure-devops-go-api/azuredevops v1.0.0-b5
 	github.com/onsi/ginkgo/v2 v2.1.4
@@ -64,7 +64,7 @@ require (
 	github.com/aws/smithy-go v1.9.0 // indirect
 	github.com/blakesmith/ar v0.0.0-20190502131153-809d4375e1fb // indirect
 	github.com/caarlos0/ctrlc v1.0.0 // indirect
-	github.com/caarlos0/env/v6 v6.9.1 // indirect
+	github.com/caarlos0/env/v6 v6.9.2 // indirect
 	github.com/caarlos0/go-reddit/v3 v3.0.1 // indirect
 	github.com/caarlos0/go-shellwords v1.0.12 // indirect
 	github.com/cavaliergopher/cpio v1.0.1 // indirect
@@ -87,8 +87,8 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.2.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/google/go-cmp v0.5.7 // indirect
-	github.com/google/go-github/v43 v43.0.0 // indirect
+	github.com/google/go-cmp v0.5.8 // indirect
+	github.com/google/go-github/v44 v44.1.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/pprof v0.0.0-20210720184732-4bb14d4b1be1 // indirect
 	github.com/google/rpmpack v0.0.0-20220314092521-38642b5e571e // indirect
@@ -120,9 +120,8 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/mapstructure v1.4.3 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
-	github.com/muesli/coral v1.0.0 // indirect
 	github.com/muesli/mango v0.1.0 // indirect
-	github.com/muesli/mango-coral v1.0.1 // indirect
+	github.com/muesli/mango-cobra v1.1.0 // indirect
 	github.com/muesli/mango-pflag v0.1.0 // indirect
 	github.com/muesli/roff v0.1.0 // indirect
 	github.com/pelletier/go-toml v1.9.4 // indirect
@@ -131,7 +130,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sergi/go-diff v1.2.0 // indirect
-	github.com/slack-go/slack v0.10.2 // indirect
+	github.com/slack-go/slack v0.10.3 // indirect
 	github.com/spf13/afero v1.8.2 // indirect
 	github.com/spf13/cast v1.4.1 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
@@ -139,7 +138,7 @@ require (
 	github.com/subosito/gotenv v1.2.0 // indirect
 	github.com/technoweenie/multipartstreamer v1.0.1 // indirect
 	github.com/ulikunitz/xz v0.5.10 // indirect
-	github.com/xanzy/go-gitlab v0.63.0 // indirect
+	github.com/xanzy/go-gitlab v0.65.0 // indirect
 	github.com/xanzy/ssh-agent v0.3.1 // indirect
 	go.opencensus.io v0.23.0 // indirect
 	gocloud.dev v0.24.0 // indirect
