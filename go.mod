@@ -6,7 +6,7 @@ require (
 	github.com/AzureAD/microsoft-authentication-library-for-go v0.5.2
 	github.com/golang/mock v1.6.0
 	github.com/google/uuid v1.3.0
-	github.com/goreleaser/goreleaser v1.10.1
+	github.com/goreleaser/goreleaser v1.10.2
 	github.com/magefile/mage v1.13.0
 	github.com/microsoft/azure-devops-go-api/azuredevops v1.0.0-b5
 	github.com/onsi/ginkgo/v2 v2.1.4
@@ -107,7 +107,7 @@ require (
 	github.com/iancoleman/orderedmap v0.2.0 // indirect
 	github.com/imdario/mergo v0.3.13 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
-	github.com/invopop/jsonschema v0.4.0 // indirect
+	github.com/invopop/jsonschema v0.5.0 // indirect
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/kevinburke/ssh_config v1.1.0 // indirect
