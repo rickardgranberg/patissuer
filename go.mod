@@ -9,7 +9,7 @@ require (
 	github.com/goreleaser/goreleaser v1.11.4
 	github.com/magefile/mage v1.13.0
 	github.com/microsoft/azure-devops-go-api/azuredevops v1.0.0-b5
-	github.com/onsi/ginkgo/v2 v2.1.6
+	github.com/onsi/ginkgo/v2 v2.2.0
 	github.com/spf13/cobra v1.5.0
 	github.com/spf13/viper v1.13.0
 	mvdan.cc/gofumpt v0.3.1
