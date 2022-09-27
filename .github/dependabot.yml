@@ -17,7 +17,7 @@ updates:
       interval: "daily"
 
   - package-ecosystem: "docker"
-    directory: "./devcontainer"
+    directory: "/.devcontainer"
     # registries:
     #   - dockerhub
     schedule:
