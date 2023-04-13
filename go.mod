@@ -12,7 +12,7 @@ require (
 	github.com/onsi/ginkgo/v2 v2.9.2
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.15.0
-	mvdan.cc/gofumpt v0.4.0
+	mvdan.cc/gofumpt v0.5.0
 )
 
 require (
