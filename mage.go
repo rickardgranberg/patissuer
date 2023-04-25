@@ -85,6 +85,11 @@ func Release() error {
 	return sh.Run("goreleaser", "release", "--snapshot", "--skip-publish", "--skip-sign", "--rm-dist")
 }
 
+// Creates a release using goreleaser
+func ReleaseCI() error {
+	return sh.Run("goreleaser", "release", "--rm-dist")
+}
+
 // Install all tool dependencies
 func ToolInstall() error {
 	tools, err := findTools()
