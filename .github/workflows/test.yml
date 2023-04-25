@@ -26,7 +26,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: 1.19
+        go-version: '1.20'
       id: go
 
     - name: Check out code into the Go module directory
@@ -47,6 +47,11 @@ jobs:
       with:
         # Optional: version of golangci-lint to use in form of v1.2 or v1.2.3 or `latest` to use the latest version
         version: latest
+    - name: VulnCheck
+      uses: magefile/mage-action@v2
+      with:
+        version: latest
+        args: vuln
     
   # test:
   #   name: Test

@@ -1,6 +1,6 @@
 module github.com/rickardgranberg/patissuer
 
-go 1.19
+go 1.20
 
 require (
 	github.com/AzureAD/microsoft-authentication-library-for-go v0.8.1
@@ -12,6 +12,7 @@ require (
 	github.com/onsi/ginkgo/v2 v2.9.2
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.15.0
+	golang.org/x/vuln v0.1.0
 	mvdan.cc/gofumpt v0.5.0
 )
 
@@ -40,7 +41,7 @@ require (
 	github.com/Azure/go-autorest/autorest/to v0.4.0 // indirect
 	github.com/Azure/go-autorest/logger v0.2.1 // indirect
 	github.com/Azure/go-autorest/tracing v0.6.0 // indirect
-	github.com/BurntSushi/toml v1.1.0 // indirect
+	github.com/BurntSushi/toml v1.2.1 // indirect
 	github.com/Masterminds/goutils v1.1.1 // indirect
 	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/Masterminds/semver/v3 v3.2.0 // indirect
@@ -222,7 +223,7 @@ require (
 	golang.org/x/term v0.7.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
-	golang.org/x/tools v0.8.0 // indirect
+	golang.org/x/tools v0.8.1-0.20230421161920-b9619ee54b47 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 	google.golang.org/api v0.110.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect

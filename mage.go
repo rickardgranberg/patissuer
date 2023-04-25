@@ -52,6 +52,12 @@ func Lint() error {
 	return sh.RunV("golangci-lint", "run")
 }
 
+// Performs a Vulnerability check on the Go code
+func Vuln() error {
+	mg.Deps(ToolInstall)
+	return sh.RunV("govulncheck", "./...")
+}
+
 // Run the tests.
 func Test() error {
 	mg.Deps(ToolInstall)
