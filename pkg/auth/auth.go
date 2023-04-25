@@ -68,7 +68,10 @@ func (a *AuthClient) loginBearerToken(ctx context.Context, token string) (string
 }
 
 func (a *AuthClient) loginInteractive(ctx context.Context, cl public.Client) (string, error) {
-	accounts := cl.Accounts()
+	accounts, err := cl.Accounts(ctx)
+	if err != nil {
+		return "", fmt.Errorf("account fetch failed: %w", err)
+	}
 	if len(accounts) > 0 {
 		// Assuming the user wanted the first account
 		userAccount := accounts[0]
@@ -94,7 +97,10 @@ func (a *AuthClient) loginDeviceCode(ctx context.Context, cl public.Client) (str
 		return "", fmt.Errorf("name lookup error: %w", err)
 	}
 
-	accounts := cl.Accounts()
+	accounts, err := cl.Accounts(ctx)
+	if err != nil {
+		return "", fmt.Errorf("account fetch failed: %w", err)
+	}
 	if len(accounts) > 0 {
 		// Assuming the user wanted the first account
 		userAccount := accounts[0]
