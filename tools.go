@@ -8,5 +8,6 @@ import (
 	_ "github.com/golang/mock/mockgen"
 	_ "github.com/goreleaser/goreleaser"
 	_ "github.com/onsi/ginkgo/v2/ginkgo"
+	_ "golang.org/x/vuln/cmd/govulncheck"
 	_ "mvdan.cc/gofumpt"
 )
