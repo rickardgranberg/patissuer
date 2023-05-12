@@ -89,7 +89,7 @@ func Release() error {
 // Creates a release using goreleaser
 func ReleaseCI() error {
 	mg.Deps(ToolInstall)
-	return sh.Run("goreleaser", "release", "--rm-dist")
+	return sh.Run("goreleaser", "release", "--clean")
 }
 
 // Install all tool dependencies
