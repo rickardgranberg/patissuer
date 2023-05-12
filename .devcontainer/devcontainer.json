@@ -25,7 +25,8 @@
 			// Add the IDs of extensions you want installed when the container is created.
 			"extensions": [
 				"onsi.vscode-ginkgo",
-				"davidanson.vscode-markdownlint"
+				"davidanson.vscode-markdownlint",
+				"GitHub.vscode-github-actions"
 			]
 		}
 	},

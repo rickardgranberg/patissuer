@@ -29,11 +29,15 @@ jobs:
           # These secrets will need to be configured for the repository:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
+      - name: Copy GPG Key
+        run: cp -r ${HOME}/.gnupg/ .
       - name: Run GoReleaser
         uses: devcontainers/ci@v0.3
         with:    
           push: never
-          runCmd: mage releaseci
+          runCmd: |
+            cp -r .gnupg/ ${HOME}
+            mage releaseci
           env: |
             GPG_FINGERPRINT=${{ steps.import_gpg.outputs.fingerprint }}
             # GitHub sets this automatically
