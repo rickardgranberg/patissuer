@@ -22,6 +22,15 @@ jobs:
         uses: actions/checkout@v3
       - name: Unshallow
         run: git fetch --prune --unshallow
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.20'
+      - name: Get Tools
+        uses: magefile/mage-action@v2
+        with:
+          version: latest
+          args: toolInstall
       - name: Import GPG key
         id: import_gpg
         uses: crazy-max/ghaction-import-gpg@v5
@@ -29,17 +38,26 @@ jobs:
           # These secrets will need to be configured for the repository:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
-      - name: Copy GPG Key
-        run: cp -r ${HOME}/.gnupg/ .
       - name: Run GoReleaser
-        uses: devcontainers/ci@v0.3
-        with:    
-          push: never
-          runCmd: |
-            mv -f .gnupg/ ${HOME}
-            mage releaseci
-          env: |
-            GPG_FINGERPRINT=${{ steps.import_gpg.outputs.fingerprint }}
-            # GitHub sets this automatically
-            GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+        uses: goreleaser/goreleaser-action@v4
+        with:
+          version: latest
+          args: release --clean
+        env:
+          GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
+          # GitHub sets this automatically
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # - name: Copy GPG Key
+      #   run: cp -r ${HOME}/.gnupg/ .
+      # - name: Run GoReleaser
+      #   uses: devcontainers/ci@v0.3
+      #   with:    
+      #     push: never
+      #     runCmd: |
+      #       mv -f .gnupg/ ${HOME}
+      #       mage releaseci
+      #     env: |
+      #       GPG_FINGERPRINT=${{ steps.import_gpg.outputs.fingerprint }}
+      #       # GitHub sets this automatically
+      #       GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
 
