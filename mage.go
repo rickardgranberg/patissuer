@@ -82,11 +82,13 @@ func Update() error {
 
 // Creates a release using goreleaser
 func Release() error {
+	mg.Deps(ToolInstall)
 	return sh.Run("goreleaser", "release", "--snapshot", "--skip-publish", "--skip-sign", "--rm-dist")
 }
 
 // Creates a release using goreleaser
 func ReleaseCI() error {
+	mg.Deps(ToolInstall)
 	return sh.Run("goreleaser", "release", "--rm-dist")
 }
 
