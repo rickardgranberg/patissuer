@@ -12,7 +12,7 @@ require (
 	github.com/onsi/ginkgo/v2 v2.11.0
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.16.0
-	golang.org/x/vuln v0.2.0
+	golang.org/x/vuln v1.0.0
 	mvdan.cc/gofumpt v0.5.0
 )
 
