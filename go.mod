@@ -3,7 +3,7 @@ module github.com/rickardgranberg/patissuer
 go 1.20
 
 require (
-	github.com/AzureAD/microsoft-authentication-library-for-go v1.0.0
+	github.com/AzureAD/microsoft-authentication-library-for-go v1.1.0
 	github.com/golang/mock v1.6.0
 	github.com/google/uuid v1.3.0
 	github.com/goreleaser/goreleaser v1.19.2
@@ -126,6 +126,7 @@ require (
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
+	github.com/golang-jwt/jwt/v5 v5.0.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
