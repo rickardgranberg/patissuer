@@ -9,6 +9,8 @@ on:
   push:
     paths-ignore:
       - 'README.md'
+env:
+  dc_name: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}-dc
   # For systems with an upstream API that could drift unexpectedly (like most SaaS systems, etc.),
   # we recommend testing at a regular interval not necessarily tied to code changes. This will 
   # ensure you are alerted to something breaking due to an API change, even if the code did not
@@ -20,6 +22,8 @@ jobs:
     name: Build DC
     runs-on: ubuntu-latest
     timeout-minutes: 6
+    outputs:
+      dc_image: '${{ env.dc_name }}:${{ github.run_number }}'
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -32,16 +36,17 @@ jobs:
     - name: Prebuild DevContainer
       uses: devcontainers/ci@v0.3
       with:    
-        imageName: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}-dc
-        cacheFrom: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}-dc:latest
+        imageName: ${{ env.dc_name }}
+        cacheFrom: ${{ env.dc_name }}:latest
         imageTag: ${{ github.run_number }},latest
         push: always
+    -
   build:
     name: Build
     runs-on: ubuntu-latest
     needs: dc
     container: 
-      image: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}-dc:${{ github.run_number }}
+      image: ${{ needs.dc.outputs.dc_image }}
     timeout-minutes: 6
     steps:
     - name: Checkout
