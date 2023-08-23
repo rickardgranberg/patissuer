@@ -49,10 +49,7 @@ jobs:
     - name: Fix ownership
       run: |
         who=$(whoami)
-        echo $who
-        echo ${GITHUB_WORKSPACE}
-        echo ${{ github.workspace }}
-        chown -R ${who}:${who} /__w/patissuer
+        chown -R ${who}:${who} ${GITHUB_WORKSPACE}
         ls -laR /__w/
 
       shell: bash
