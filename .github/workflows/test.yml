@@ -16,27 +16,32 @@ on:
   # schedule:
   #   - cron: '0 13 * * *'
 jobs:
-  # ensure the code builds...
-  build:
-    name: Build
+  dc:
+    name: Build DC
     runs-on: ubuntu-latest
     timeout-minutes: 6
     steps:
     - name: Checkout
       uses: actions/checkout@v3
+    - name: Prebuild DevContainer
+      uses: devcontainers/ci@v0.3
+      with:    
+        imageName: ghcr.io/rickardgranberg/patissuer-dc
+        cacheFrom: ghcr.io/rickardgranberg/patissuer-dc
+        push: always
+  # ensure the code builds...
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    container: ghcr.io/rickardgranberg/patissuer-dc
+    timeout-minutes: 6
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
     - name: Run mage build
-      uses: devcontainers/ci@v0.3
-      with:    
-        push: never
-        runCmd: mage build
+      run: mage build
     - name: Run mage lint
-      uses: devcontainers/ci@v0.3
-      with:    
-        push: never
-        runCmd: mage lint
+      run: mage lint
     - name: Run mage vulncheck
-      uses: devcontainers/ci@v0.3
-      with:    
-        push: never
-        runCmd: mage vuln
+      run: mage vuln
     
