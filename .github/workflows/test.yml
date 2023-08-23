@@ -40,7 +40,6 @@ jobs:
         cacheFrom: ${{ env.dc_name }}:latest
         imageTag: ${{ github.run_number }},latest
         push: always
-    -
   build:
     name: Build
     runs-on: ubuntu-latest
