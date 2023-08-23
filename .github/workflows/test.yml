@@ -47,7 +47,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
     - name: Fix permissions
-      run: chown -R 1000:1000 ${{ github.workspace }}
+      run: chown -R 1000:1000 _w/patissuer/patissuer
       shell: bash
     - name: Run mage build
       run: mage build
