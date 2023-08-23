@@ -43,7 +43,8 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     needs: dc
-    container: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+    container: 
+      image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
     timeout-minutes: 6
     steps:
     - name: Checkout
