@@ -42,11 +42,13 @@ jobs:
     needs: dc
     container: 
       image: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}
-      options: '--user 1000:1000'
     timeout-minutes: 6
     steps:
     - name: Checkout
       uses: actions/checkout@v3
+    - name: Fix permissions
+      run: chown -R 1000:1000 .
+      shell: bash
     - name: Run mage build
       run: mage build
     - name: Run mage lint
