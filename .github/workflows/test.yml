@@ -34,14 +34,14 @@ jobs:
       with:    
         imageName: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}
         cacheFrom: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}:latest
-        imageTag: ${{ github.run_id }},latest
+        imageTag: ${{ github.run_number }},latest
         push: always
   build:
     name: Build
     runs-on: ubuntu-latest
     needs: dc
     container: 
-      image: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}:${{ github.run_id }}
+      image: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}:${{ github.run_number }}
     timeout-minutes: 6
     steps:
     - name: Checkout
