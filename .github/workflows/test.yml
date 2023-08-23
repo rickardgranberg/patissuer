@@ -16,30 +16,29 @@ on:
   # schedule:
   #   - cron: '0 13 * * *'
 jobs:
-  # dc:
-  #   name: Build DC
-  #   runs-on: ubuntu-latest
-  #   timeout-minutes: 6
-  #   steps:
-  #   - name: Checkout
-  #     uses: actions/checkout@v3
-  #   - name: Log in to the Container registry
-  #     uses: docker/login-action@v2
-  #     with:
-  #       registry: ${{ vars.DOCKER_REGISTRY }}
-  #       username: ${{ github.actor }}
-  #       password: ${{ secrets.GITHUB_TOKEN }}
-  #   - name: Prebuild DevContainer
-  #     uses: devcontainers/ci@v0.3
-  #     with:    
-  #       imageName: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}
-  #       cacheFrom: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}
-  #       push: always
-  # ensure the code builds...
+  dc:
+    name: Build DC
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Log in to the Container registry
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ vars.DOCKER_REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Prebuild DevContainer
+      uses: devcontainers/ci@v0.3
+      with:    
+        imageName: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}
+        cacheFrom: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}
+        push: always
   build:
     name: Build
     runs-on: ubuntu-latest
-    #needs: dc
+    needs: dc
     container: 
       image: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}
     timeout-minutes: 6
@@ -50,8 +49,6 @@ jobs:
       run: |
         who=$(whoami)
         chown -R ${who}:${who} ${GITHUB_WORKSPACE}
-        ls -laR /__w/
-
       shell: bash
     - name: Run mage build
       run: mage build
