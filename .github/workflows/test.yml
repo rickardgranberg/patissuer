@@ -9,8 +9,6 @@ on:
   push:
     paths-ignore:
       - 'README.md'
-env:
-  dc_name: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}-dc
   # For systems with an upstream API that could drift unexpectedly (like most SaaS systems, etc.),
   # we recommend testing at a regular interval not necessarily tied to code changes. This will 
   # ensure you are alerted to something breaking due to an API change, even if the code did not
@@ -22,6 +20,8 @@ jobs:
     name: Build DC
     runs-on: ubuntu-latest
     timeout-minutes: 6
+    env:
+      dc_name: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}-dc
     outputs:
       dc_image: '${{ env.dc_name }}:${{ github.run_number }}'
     steps:
