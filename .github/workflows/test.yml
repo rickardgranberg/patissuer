@@ -26,15 +26,15 @@ jobs:
     - name: Prebuild DevContainer
       uses: devcontainers/ci@v0.3
       with:    
-        imageName: ghcr.io/rickardgranberg/patissuer-dc
-        cacheFrom: ghcr.io/rickardgranberg/patissuer-dc
+        imageName: ghcr.io/rickardgranberg/patissuer
+        cacheFrom: ghcr.io/rickardgranberg/patissuer
         push: always
   # ensure the code builds...
   build:
     name: Build
     runs-on: ubuntu-latest
     needs: dc
-    container: ghcr.io/rickardgranberg/patissuer-dc
+    container: ghcr.io/rickardgranberg/patissuer
     timeout-minutes: 6
     steps:
     - name: Checkout
