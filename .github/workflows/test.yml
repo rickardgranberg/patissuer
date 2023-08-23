@@ -47,7 +47,12 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
     - name: Fix permissions
-      run: chown -R 1001:1001 /__w/patissuer/patissuer
+      run: |
+        who=$(whoami)
+        echo $who
+        id -u $who
+        id -g $who
+        exit 1
       shell: bash
     - name: Run mage build
       run: mage build
