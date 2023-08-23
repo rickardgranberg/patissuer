@@ -42,7 +42,7 @@ jobs:
     needs: dc
     container: 
       image: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}
-      options: '--user 1001:1001'
+      options: '--user 1000:1000'
     timeout-minutes: 6
     steps:
     - name: Checkout
