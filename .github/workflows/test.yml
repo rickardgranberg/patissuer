@@ -50,7 +50,7 @@ jobs:
       run: |
         who=$(whoami)
         echo $who
-        chmod -R ${who}:${who} /__w
+        chown -R ${who}:${who} /__w
         ls -laR /__w/
 
       shell: bash
