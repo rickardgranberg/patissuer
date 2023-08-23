@@ -16,27 +16,49 @@ on:
   # schedule:
   #   - cron: '0 13 * * *'
 jobs:
-  # ensure the code builds...
+  dc:
+    name: Build DC
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    env:
+      dc_name: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}-dc
+    outputs:
+      dc_image: '${{ env.dc_name }}:${{ github.run_number }}'
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Log in to the Container registry
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ vars.DOCKER_REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Prebuild DevContainer
+      uses: devcontainers/ci@v0.3
+      with:    
+        imageName: ${{ env.dc_name }}
+        cacheFrom: ${{ env.dc_name }}:latest
+        imageTag: ${{ github.run_number }},latest
+        push: always
   build:
     name: Build
     runs-on: ubuntu-latest
+    needs: dc
+    container: 
+      image: ${{ needs.dc.outputs.dc_image }}
     timeout-minutes: 6
     steps:
     - name: Checkout
       uses: actions/checkout@v3
+    - name: Fix ownership
+      run: |
+        who=$(whoami)
+        chown -R ${who}:${who} ${GITHUB_WORKSPACE}
+      shell: bash
     - name: Run mage build
-      uses: devcontainers/ci@v0.3
-      with:    
-        push: never
-        runCmd: mage build
+      run: mage build
     - name: Run mage lint
-      uses: devcontainers/ci@v0.3
-      with:    
-        push: never
-        runCmd: mage lint
+      run: mage lint
     - name: Run mage vulncheck
-      uses: devcontainers/ci@v0.3
-      with:    
-        push: never
-        runCmd: mage vuln
+      run: mage vuln
     
