@@ -50,13 +50,9 @@ jobs:
       run: |
         who=$(whoami)
         echo $who
-        id -u $who
-        id -g $who
-
-        ls -la .
-
+        chmod -R ${who}:${who} /__w
         ls -laR /__w/
-        exit 1
+
       shell: bash
     - name: Run mage build
       run: mage build
