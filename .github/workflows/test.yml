@@ -26,14 +26,14 @@ jobs:
     - name: Log in to the Container registry
       uses: docker/login-action@v2
       with:
-        registry: ${{ var.DOCKER_REGISTRY }}
+        registry: ${{ vars.DOCKER_REGISTRY }}
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Prebuild DevContainer
       uses: devcontainers/ci@v0.3
       with:    
-        imageName: ${{ var.DOCKER_REGISTRY }}/${{ github.repository }}
-        cacheFrom: ${{ var.DOCKER_REGISTRY }}/${{ github.repository }}
+        imageName: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}
+        cacheFrom: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}
         push: always
   # ensure the code builds...
   build:
@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: dc
     container: 
-      image: ${{ var.DOCKER_REGISTRY }}/${{ github.repository }}
+      image: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}
     timeout-minutes: 6
     steps:
     - name: Checkout
