@@ -32,8 +32,8 @@ jobs:
     - name: Prebuild DevContainer
       uses: devcontainers/ci@v0.3
       with:    
-        imageName: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}
-        cacheFrom: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}:latest
+        imageName: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}-dc
+        cacheFrom: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}-dc:latest
         imageTag: ${{ github.run_number }},latest
         push: always
   build:
@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: dc
     container: 
-      image: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}:${{ github.run_number }}
+      image: ${{ vars.DOCKER_REGISTRY }}/${{ github.repository }}-dc:${{ github.run_number }}
     timeout-minutes: 6
     steps:
     - name: Checkout
