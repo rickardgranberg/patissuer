@@ -47,12 +47,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Unshallow
-        run: git fetch --prune --unshallow
       - name: Fix ownership
         run: |
           who=$(whoami)
           chown -R ${who}:${who} ${GITHUB_WORKSPACE}
+      - name: Unshallow
+        run: git fetch --prune --unshallow
       - name: Get Tools
         run: mage toolInstall
       - name: Import GPG key
