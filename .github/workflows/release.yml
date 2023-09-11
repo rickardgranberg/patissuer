@@ -45,12 +45,15 @@ jobs:
     container: 
       image: ${{ needs.dc.outputs.dc_image }}
     steps:
+      - name: 'Cleanup build folder'
+        run: |
+          ls -la ./
+          rm -rf ./* || true
+          rm -rf ./.??* || true
+          ls -la ./
+        shell: bash
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Fix ownership
-        run: |
-          who=$(whoami)
-          chown -R ${who}:${who} ${GITHUB_WORKSPACE}
       - name: Unshallow
         run: git fetch --prune --unshallow
       - name: Get Tools
