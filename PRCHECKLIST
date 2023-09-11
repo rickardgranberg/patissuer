@@ -1,0 +1,73 @@
+# Checklist Buddy by Mibex Software https://www.mibexsoftware.com/
+
+# To create a new task, use '+task+' followed by the task description. 
+# To create a reminder (a non-blocking comment), use '+comment+' followed by the comment text
+# To name a checklist, create a line entry with the desired filter settings and +title+ Your Checklist Title
+
+# To filter when a task is applied, prepend the task/comment/title with one or more of the following filters:
+# --source         - for pull requests for which the source branch matches a specific pattern
+# --target         - for pull requests for which the target/destination branch matches a specific pattern
+# --files          - for pull requests for which changes have been made to files matching a diff file pattern
+# --commit-title   - for pull requests with commit titles (first line of commit message) that contain a substring
+# --put-on-files   - to apply your checklist on each file matching the diff file pattern, but only if these files are changed in the pull request
+
+# Each of the filters above can be rather used as an exception rule by appending the -except modifier. For example,
+# --source-except  - for pull requests for which the source branch does not match a specific pattern
+
+# When more than one task has the same filter settings, these are grouped as a checklist.
+# Note: entries with the same filter settings will be grouped together, regardless of position in file
+
+# For more information, check our docs: https://docs.mibexsoftware.com/checklist-buddy/syntax-reference
+
+# Checklist for new features
+--source dev/* +title+ Feature releasable?
+--source dev/* +task+ Feature is [discoverable](https://fishshell.com/docs/current/design.html#the-law-of-discoverability) for users?
+--source dev/* +task+ [UX intuitive and better than before](https://fishshell.com/docs/current/design.html#the-law-of-user-focus)?
+--source dev/* +task+ Feature covered by automated tests?
+--source dev/* +task+ [Public documentation](https://mibexsoftware.atlassian.net/wiki/spaces/CB/pages/3004661778/GitHub+-+Pull+Request+Checklist+Buddy) and [Marketplace listing](https://github.com/marketplace/pull-request-checklist-buddy) ready?
+--source dev/* +task+ Release note snippet for public release notes?
+--source dev/* +task+ Manual test cases and testing instructions documented in Jira issues?
+
+
+# Checklist for hot fixes
+--target main --source hotfix/* +title+ Hotfix releasable?
+--target main --source hotfix/* +task+ Hotfix covered by automated tests?
+--target main --source hotfix/* +task+ Release note snippet for public release notes?
+--target main --source hotfix/* +task+ Manual test cases and testing instructions ready?
+
+
+# Checklist for new releases
+--target release/checklist-buddy +title+ release checklist :checkered_flag:
+--target release/checklist-buddy +task+ Jira version: description is updated and released
+--target release/checklist-buddy +task+ Jira "Fix version" on all issues, remove version from unfinished issue
+--target release/checklist-buddy +task+ Version number bumped?
+--target release/checklist-buddy +task+ `git tag --annotate checklist-buddy-X.Y.Z` and `git push`
+--target release/checklist-buddy +task+ [Public documentation](https://mibexsoftware.atlassian.net/wiki/spaces/CB/pages/3004661778/GitHub+-+Pull+Request+Checklist+Buddy) ready to publish?
+--target release/checklist-buddy +task+ [Marketplace listing](https://github.com/marketplace/pull-request-checklist-buddy) updates ready? screenshots, bullet points, highlights etc.
+--target release/checklist-buddy +comment+ Inform all customers in associated Jira tickets about the new release and close them if possible.
+--target release/checklist-buddy +task+ Social media announcement is scheduled?
+--target release/checklist-buddy +comment+ All done? merge PR with `--ff-only`.
+
+
+# Checklist for individual files: global PR tasks vs. file-level tasks with --put-on-files
+--files *.jpg +task+ Are images appropriately compressed?
+--put-on-files CODEOWNERS --with-modification deleted +task+ When deleting this file, no Code Owners will be assigned anymore!
+
+
+# Checklist for commit titles, e.g. for WIP commits: 
+--commit-title WIP +task+ Clean-up Work-in-progress commits 
+
+
+# Checklist for security guidelines
+--files /*.java +title+ Change secure?
+--files /*.java +task+ All new public endpoints enforce authorization?
+--files /*.java +task+ [OWASP top 10](https://owasp.org/Top10/) considered and no potential vulnerabilities found?
+--files /*.java +task+ Any web UI is [escaping output to prevent XSS](https://stackoverflow.com/questions/12799539/javascript-xss-prevention)
+--files /*.java +task+ [SQL Injection](https://stackoverflow.com/questions/9516625/prevent-sql-injection-attacks-in-a-java-program) has been prevented through parameterized queries
+
+
+# Checklist for coding guidelines
++title+ Complies with our architecture and coding standards?
++task+  Potential performance pitfalls were considered?
++task+  Commit messages follow our convention?
++task+  Does this code comply with the teams chosen architecture?
