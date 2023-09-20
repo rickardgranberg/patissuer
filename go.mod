@@ -3,7 +3,7 @@ module github.com/rickardgranberg/patissuer
 go 1.21
 
 require (
-	github.com/AzureAD/microsoft-authentication-library-for-go v1.1.1
+	github.com/AzureAD/microsoft-authentication-library-for-go v1.2.0
 	github.com/golang/mock v1.6.0
 	github.com/google/uuid v1.3.1
 	github.com/goreleaser/goreleaser v1.20.0
