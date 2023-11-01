@@ -5,7 +5,7 @@ go 1.21
 require (
 	github.com/AzureAD/microsoft-authentication-library-for-go v1.2.0
 	github.com/golang/mock v1.6.0
-	github.com/google/uuid v1.3.1
+	github.com/google/uuid v1.4.0
 	github.com/goreleaser/goreleaser v1.21.2
 	github.com/magefile/mage v1.15.0
 	github.com/microsoft/azure-devops-go-api/azuredevops v1.0.0-b5
