@@ -81,13 +81,13 @@ func issue(cmd *cobra.Command, args []string) error {
 	format := viper.GetString(flagOutput)
 	switch format {
 	case "raw":
-		return outputContent(pat.Token)
+		return outputContent("%s", pat.Token)
 	case "json":
 		b, err := json.Marshal(pat)
 		if err != nil {
 			return err
 		}
-		return outputContent(string(b))
+		return outputContent("%s", string(b))
 	}
 	return nil
 }
@@ -120,13 +120,13 @@ func list(cmd *cobra.Command, args []string) error {
 				return err
 			}
 		}
-		return outputContent(b.String())
+		return outputContent("%s", b.String())
 	case "json":
 		b, err := json.Marshal(pats)
 		if err != nil {
 			return err
 		}
-		return outputContent(string(b))
+		return outputContent("%s", string(b))
 	}
 
 	return nil
