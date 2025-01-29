@@ -1,6 +1,7 @@
 module github.com/rickardgranberg/patissuer
 
-go 1.23.0
+go 1.23.4
+
 toolchain go1.23.5
 
 require (
