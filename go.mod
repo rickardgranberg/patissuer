@@ -5,7 +5,7 @@ go 1.23.4
 toolchain go1.23.5
 
 require (
-	github.com/AzureAD/microsoft-authentication-library-for-go v1.3.2
+	github.com/AzureAD/microsoft-authentication-library-for-go v1.3.3
 	github.com/golang/mock v1.6.0
 	github.com/google/uuid v1.6.0
 	github.com/goreleaser/goreleaser/v2 v2.6.1
