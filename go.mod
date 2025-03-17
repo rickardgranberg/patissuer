@@ -300,6 +300,7 @@ require (
 	go.opentelemetry.io/otel/trace v1.33.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/automaxprocs v1.6.0 // indirect
+	go.uber.org/mock v0.5.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
 	gocloud.dev v0.40.0 // indirect
@@ -333,4 +334,12 @@ require (
 	sigs.k8s.io/kind v0.24.0 // indirect
 	sigs.k8s.io/yaml v1.4.0 // indirect
 	software.sslmate.com/src/go-pkcs12 v0.5.0 // indirect
+)
+
+tool (
+	github.com/goreleaser/goreleaser/v2
+	github.com/onsi/ginkgo/v2/ginkgo
+	go.uber.org/mock/mockgen
+	golang.org/x/vuln/cmd/govulncheck
+	mvdan.cc/gofumpt
 )
