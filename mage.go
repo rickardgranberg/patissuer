@@ -13,10 +13,8 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/magefile/mage/mg"
 	"github.com/magefile/mage/sh"
@@ -94,39 +92,6 @@ func ReleaseCI() error {
 
 // Install all tool dependencies
 func ToolInstall() error {
-	tools, err := findTools()
-	if err != nil {
-		return err
-	}
 
-	for _, t := range tools {
-		if err := sh.Run("go", "install", t); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func findTools() ([]string, error) {
-	f, err := os.Open("tools.go")
-	if err != nil {
-		return nil, err
-	}
-
-	defer f.Close()
-
-	var tools []string
-	scanner := bufio.NewScanner(f)
-	for scanner.Scan() {
-		line := strings.Trim(scanner.Text(), " \t")
-		if strings.HasPrefix(line, "_") {
-			tokens := strings.Split(line, " ")
-			tools = append(tools, strings.Trim(tokens[1], "\""))
-		}
-	}
-
-	if err := scanner.Err(); err != nil {
-		return nil, err
-	}
-	return tools, nil
+	return sh.Run("go", "install", "tool")
 }
