@@ -184,7 +184,7 @@ func outputContent(format string, a ...interface{}) error {
 			return fmt.Errorf("failed to create file: %w", err)
 		}
 
-		if _, err := f.WriteString(fmt.Sprintf(format, a...)); err != nil {
+		if _, err := fmt.Fprintf(f, format, a...); err != nil {
 			return fmt.Errorf("failed to write to file: %w", err)
 		}
 	}
