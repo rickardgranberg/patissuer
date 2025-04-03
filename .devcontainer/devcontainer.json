@@ -10,6 +10,9 @@
 		},
 		"ghcr.io/guiyomh/features/mage": {
 			"version": "1.15.0"
+		},
+		"ghcr.io/guiyomh/features/goreleaser": {
+			"version": "2.8.2"
 		}
 	},
 	"customizations": {
