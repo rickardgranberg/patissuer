@@ -21,7 +21,7 @@ const (
 )
 
 const loginHost = "login.microsoftonline.com"
-const aadInstance = "https://" + loginHost + "/%s/v2.0"
+const aadInstance = "https://" + loginHost + "/%s"
 
 var scopes = []string{"499b84ac-1321-427f-aa17-267ca6975798/user_impersonation"} //Constant value to target Azure DevOps. Do not change
 
