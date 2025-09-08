@@ -3,7 +3,7 @@ module github.com/rickardgranberg/patissuer
 go 1.25.0
 
 require (
-	github.com/AzureAD/microsoft-authentication-library-for-go v1.4.2
+	github.com/AzureAD/microsoft-authentication-library-for-go v1.5.0
 	github.com/google/uuid v1.6.0
 	github.com/magefile/mage v1.15.0
 	github.com/microsoft/azure-devops-go-api/azuredevops v1.0.0-b5
@@ -15,7 +15,7 @@ require (
 	github.com/fsnotify/fsnotify v1.8.0 // indirect
 	github.com/go-task/slim-sprig/v3 v3.0.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.4.0 // indirect
-	github.com/golang-jwt/jwt/v5 v5.2.1 // indirect
+	github.com/golang-jwt/jwt/v5 v5.2.2 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/pprof v0.0.0-20241210010833-40e02aabc2ad // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
