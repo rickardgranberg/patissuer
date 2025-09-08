@@ -1,6 +1,6 @@
 module github.com/rickardgranberg/patissuer
 
-go 1.24.2
+go 1.25.0
 
 require (
 	github.com/AzureAD/microsoft-authentication-library-for-go v1.4.2
@@ -14,7 +14,7 @@ require (
 require (
 	github.com/fsnotify/fsnotify v1.8.0 // indirect
 	github.com/go-task/slim-sprig/v3 v3.0.0 // indirect
-	github.com/go-viper/mapstructure/v2 v2.2.1 // indirect
+	github.com/go-viper/mapstructure/v2 v2.4.0 // indirect
 	github.com/golang-jwt/jwt/v5 v5.2.1 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/pprof v0.0.0-20241210010833-40e02aabc2ad // indirect
