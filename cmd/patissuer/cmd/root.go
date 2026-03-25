@@ -115,7 +115,7 @@ func list(cmd *cobra.Command, args []string) error {
 		b := strings.Builder{}
 
 		for _, t := range pats {
-			_, err := b.WriteString(fmt.Sprintf("%s %s %s\n", t.AuthorizationId, t.DisplayName, t.Scope))
+			_, err := fmt.Fprintf(&b, "%s %s %s\n", t.AuthorizationId, t.DisplayName, t.Scope)
 			if err != nil {
 				return err
 			}
