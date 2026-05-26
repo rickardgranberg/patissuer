@@ -1,3 +1,10 @@
+
+# This repo has been archived
+
+The purpose of this utility was to provide an easy way to authenticate with Azure DevOps, mainly Azure Artifacts from inside Dev Containers. 
+This functionality is now provided in a much more integrated way by https://github.com/microsoft/codespace-features/tree/main/src/artifacts-helper so I suggest migration to it.
+
+
 # patissuer
 
 Azure DevOps Personal Access Token Issuer
